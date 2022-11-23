@@ -1,30 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import $ from 'jquery';
+import axios from 'axios';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { 
-      repos: []
-    }
+const App = () => {
 
+  const [repos, setRepos] = useState([]);
+
+  const search = (user) => {
+    console.log(`${user} was searched`);
+    axios.post('/repos', {user})
+    .then((user) => {
+      console.log(user);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
-  search (term) {
-    console.log(`${term} was searched`);
-    // TODO
-  }
-
-  render () {
-    return (<div>
+  return (
+    <div>
       <h1>Github Fetcher</h1>
-      <RepoList repos={this.state.repos}/>
-      <Search onSearch={this.search.bind(this)}/>
-    </div>)
-  }
+      <RepoList repos={repos}/>
+      <Search onSearch={search}/>
+    </div>
+  );
 }
 
 ReactDOM.render(<App />, document.getElementById('app'));

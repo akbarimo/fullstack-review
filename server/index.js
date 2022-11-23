@@ -1,23 +1,15 @@
 const express = require('express');
-let app = express();
+const morgan = require('morgan');
+require('dotenv').config();
+const router = require('./Routers/router.js');
+const path = require('path');
+const app = express();
 
-app.use(express.static(__dirname + '/../client/dist'));
+app.use(express.static(`${__dirname}/../client/dist`));
+app.use(express.json());
+app.use(morgan('dev'));
+app.use(router);
 
-app.post('/repos', function (req, res) {
-  // TODO - your code here!
-  // This route should take the github username provided
-  // and get the repo information from the github API, then
-  // save the repo information in the database
-});
+const port = process.env.PORT || 3000;
 
-app.get('/repos', function (req, res) {
-  // TODO - your code here!
-  // This route should send back the top 25 repos
-});
-
-let port = 1128;
-
-app.listen(port, function() {
-  console.log(`listening on port ${port}`);
-});
-
+app.listen(port, () => console.log(`Listening on port ${port}`));
